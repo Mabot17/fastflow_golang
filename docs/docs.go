@@ -15,6 +15,89 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/lap-stok": {
+            "get": {
+                "description": "Get stock movement report",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Get Stock Report",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product Name",
+                        "name": "product_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start Date",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End Date",
+                        "name": "end_date",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.LapStock"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/lap-stok/export": {
+            "get": {
+                "description": "Export laporan stok ke Excel",
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Export Stock Report Excel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product Name",
+                        "name": "product_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start Date",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End Date",
+                        "name": "end_date",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                }
+            }
+        },
         "/products": {
             "get": {
                 "description": "Get all products",
@@ -462,6 +545,32 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.LapStock": {
+            "type": "object",
+            "properties": {
+                "keluar": {
+                    "type": "number",
+                    "format": "float64"
+                },
+                "masuk": {
+                    "type": "number",
+                    "format": "float64"
+                },
+                "productName": {
+                    "type": "string"
+                },
+                "saldo": {
+                    "type": "number",
+                    "format": "float64"
+                },
+                "sumber": {
+                    "type": "string"
+                },
+                "tanggal": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Product": {
             "type": "object",
             "properties": {

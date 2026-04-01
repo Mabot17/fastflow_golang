@@ -22,6 +22,7 @@ func SetupRouter() *gin.Engine {
 	router.RegisterProductRoutes(api)
 	router.RegisterStockInRoutes(api)
 	router.RegisterStockOutRoutes(api)
+	router.RegisterLapStockRoutes(api)
 
 	return r
 }
