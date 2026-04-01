@@ -316,6 +316,143 @@
                     }
                 }
             }
+        },
+        "/stock-out": {
+            "post": {
+                "description": "Create stock out draft and reserve stock (does not reduce physical stock yet)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock Out"
+                ],
+                "summary": "Allocate Stock Out (Reserve)",
+                "parameters": [
+                    {
+                        "description": "Stock Out Request",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.CreateStockOutRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/stock-out/{id}/cancel": {
+            "post": {
+                "description": "Cancel stock out and rollback reserved stock",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock Out"
+                ],
+                "summary": "Cancel Stock Out",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Stock Out ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/stock-out/{id}/finish": {
+            "post": {
+                "description": "Finalize stock out and reduce physical stock",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock Out"
+                ],
+                "summary": "Finish Stock Out",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Stock Out ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -357,12 +494,37 @@
                         "$ref": "#/definitions/schema.StockInItem"
                     }
                 },
+                "supplier": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.CreateStockOutRequest": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.StockOutItem"
+                    }
+                },
                 "pelanggan": {
                     "type": "string"
                 }
             }
         },
         "schema.StockInItem": {
+            "type": "object",
+            "properties": {
+                "product_id": {
+                    "type": "integer"
+                },
+                "qty": {
+                    "type": "number"
+                }
+            }
+        },
+        "schema.StockOutItem": {
             "type": "object",
             "properties": {
                 "product_id": {

@@ -25,10 +25,26 @@ definitions:
         items:
           $ref: '#/definitions/schema.StockInItem'
         type: array
+      supplier:
+        type: string
+    type: object
+  schema.CreateStockOutRequest:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/schema.StockOutItem'
+        type: array
       pelanggan:
         type: string
     type: object
   schema.StockInItem:
+    properties:
+      product_id:
+        type: integer
+      qty:
+        type: number
+    type: object
+  schema.StockOutItem:
     properties:
       product_id:
         type: integer
@@ -251,4 +267,95 @@ paths:
       summary: Finish Stock In
       tags:
       - Stock In
+  /stock-out:
+    post:
+      consumes:
+      - application/json
+      description: Create stock out draft and reserve stock (does not reduce physical
+        stock yet)
+      parameters:
+      - description: Stock Out Request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.CreateStockOutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Allocate Stock Out (Reserve)
+      tags:
+      - Stock Out
+  /stock-out/{id}/cancel:
+    post:
+      description: Cancel stock out and rollback reserved stock
+      parameters:
+      - description: Stock Out ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Cancel Stock Out
+      tags:
+      - Stock Out
+  /stock-out/{id}/finish:
+    post:
+      description: Finalize stock out and reduce physical stock
+      parameters:
+      - description: Stock Out ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Finish Stock Out
+      tags:
+      - Stock Out
 swagger: "2.0"
