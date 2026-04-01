@@ -5,11 +5,106 @@ import (
 	"errors"
 	"inventaris-app/config"
 	"inventaris-app/schema"
+	"inventaris-app/model"
 )
 
 // =======================
 // CREATE STOCK IN
 // =======================
+
+func GetStockInList() ([]model.StockInList, error) {
+	
+	rows, err := config.DB.Query(context.Background(), `
+		SELECT
+			sm.sm_id,
+			sm.sm_supplier,
+			sm.sm_status,
+			sm.sm_created_at,
+
+			smp.smp_prd_id,
+			p.prd_nama,
+			smp.smp_qty
+		FROM inventaris.stok_masuk sm
+		JOIN inventaris.stok_masuk_produk smp ON smp.smp_sm_id = sm.sm_id
+		JOIN inventaris.produk p ON p.prd_id = smp.smp_prd_id
+		ORDER BY sm.sm_created_at DESC
+	`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var result []model.StockInList
+
+	for rows.Next() {
+		var item model.StockInList
+
+		err := rows.Scan(
+			&item.ID,
+			&item.Supplier,
+			&item.Status,
+			&item.CreatedAt,
+			&item.ProductID,
+			&item.ProductName,
+			&item.Qty,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, item)
+	}
+
+	return result, nil
+}
+
+func GetStockInByID(id string) ([]model.StockInList, error) {
+	rows, err := config.DB.Query(context.Background(), `
+		SELECT
+			sm.sm_id,
+			sm.sm_supplier,
+			sm.sm_status,
+			sm.sm_created_at,
+
+			smp.smp_prd_id,
+			p.prd_nama,
+			smp.smp_qty
+		FROM inventaris.stok_masuk sm
+		JOIN inventaris.stok_masuk_produk smp ON smp.smp_sm_id = sm.sm_id
+		JOIN inventaris.produk p ON p.prd_id = smp.smp_prd_id
+		WHERE sm.sm_id = $1
+		ORDER BY sm.sm_created_at DESC
+	`, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var result []model.StockInList
+
+	for rows.Next() {
+		var item model.StockInList
+
+		err := rows.Scan(
+			&item.ID,
+			&item.Supplier,
+			&item.Status,
+			&item.CreatedAt,
+			&item.ProductID,
+			&item.ProductName,
+			&item.Qty,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, item)
+	}
+
+	return result, nil
+}
 
 func CreateStockIn(req schema.CreateStockInRequest) error {
 	tx, err := config.DB.Begin(context.Background())

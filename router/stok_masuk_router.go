@@ -8,6 +8,48 @@ import (
 )
 
 // =======================
+// GET LIST
+// =======================
+
+// @Summary Get Stock In List
+// @Tags Stock In
+// @Produce json
+// @Success 200 {array} model.StockIn
+// @Router /stock-in [get]
+func GetStockInListHandler(c *gin.Context) {
+
+	data, err := crud.GetStockInList()
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, data)
+}
+
+// =======================
+// GET DETAIL
+// =======================
+
+// @Summary Get Stock In Detail
+// @Tags Stock In
+// @Produce json
+// @Param id path string true "Stock In ID"
+// @Success 200 {object} model.StockIn
+// @Router /stock-in/{id} [get]
+func GetStockInDetailHandler(c *gin.Context) {
+	id := c.Param("id")
+
+	data, err := crud.GetStockInByID(id)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, data)
+}
+
+// =======================
 // CREATE
 // =======================
 
@@ -84,6 +126,8 @@ func CancelStockInHandler(c *gin.Context) {
 // =======================
 
 func RegisterStockInRoutes(r *gin.RouterGroup) {
+	r.GET("/stock-in", GetStockInListHandler)
+	r.GET("/stock-in/:id", GetStockInDetailHandler)
 	r.POST("/stock-in", CreateStockInHandler)
 	r.POST("/stock-in/:id/finish", FinishStockInHandler)
 	r.POST("/stock-in/:id/cancel", CancelStockInHandler)

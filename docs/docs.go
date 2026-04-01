@@ -309,6 +309,26 @@ const docTemplate = `{
             }
         },
         "/stock-in": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock In"
+                ],
+                "summary": "Get Stock In List",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.StockIn"
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -339,6 +359,34 @@ const docTemplate = `{
                             "additionalProperties": {
                                 "type": "string"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/stock-in/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock In"
+                ],
+                "summary": "Get Stock In Detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Stock In ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.StockIn"
                         }
                     }
                 }
@@ -407,6 +455,26 @@ const docTemplate = `{
             }
         },
         "/stock-out": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock Out"
+                ],
+                "summary": "Get Stock Out List",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.StockOut"
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create stock out draft and reserve stock (does not reduce physical stock yet)",
                 "consumes": [
@@ -455,6 +523,37 @@ const docTemplate = `{
                             "type": "object",
                             "additionalProperties": {
                                 "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/stock-out/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock Out"
+                ],
+                "summary": "Get Stock Out Detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Stock Out ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.StockOut"
                             }
                         }
                     }
@@ -581,6 +680,46 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "sku": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.StockIn": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "supplier": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.StockOut": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "pelanggan": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updatedAt": {
                     "type": "string"
                 }
             }

@@ -5,7 +5,107 @@ import (
 	"errors"
 	"inventaris-app/config"
 	"inventaris-app/schema"
+	"inventaris-app/model"
 )
+
+func GetStockOutList() ([]model.StockOutList, error) {
+	rows, err := config.DB.Query(context.Background(), `
+		SELECT
+			so.sk_id,
+			so.sk_pelanggan,
+			so.sk_status,
+			so.sk_created_at,
+
+			skp.skp_prd_id,
+			p.prd_nama,
+			skp.skp_qty
+		FROM inventaris.stok_keluar so
+		JOIN inventaris.stok_keluar_produk skp ON skp.skp_sk_id = so.sk_id
+		JOIN inventaris.produk p ON p.prd_id = skp.skp_prd_id
+		ORDER BY so.sk_created_at DESC
+	`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var result []model.StockOutList
+
+	for rows.Next() {
+		var item model.StockOutList
+
+		err := rows.Scan(
+			&item.ID,
+			&item.Pelanggan,
+			&item.Status,
+			&item.CreatedAt,
+			&item.ProductID,
+			&item.ProductName,
+			&item.Qty,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, item)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func GetStockOutByID(id string) ([]model.StockOutList, error) {
+	rows, err := config.DB.Query(context.Background(), `
+		SELECT
+			so.sk_id,
+			so.sk_pelanggan,
+			so.sk_status,
+			so.sk_created_at,
+
+			skp.skp_prd_id,
+			p.prd_nama,
+			skp.skp_qty
+		FROM inventaris.stok_keluar so
+		JOIN inventaris.stok_keluar_produk skp ON skp.skp_sk_id = so.sk_id
+		JOIN inventaris.produk p ON p.prd_id = skp.skp_prd_id
+		WHERE so.sk_id = $1
+		ORDER BY so.sk_created_at DESC
+	`, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var result []model.StockOutList
+
+	for rows.Next() {
+		var item model.StockOutList
+
+		err := rows.Scan(
+			&item.ID,
+			&item.Pelanggan,
+			&item.Status,
+			&item.CreatedAt,
+			&item.ProductID,
+			&item.ProductName,
+			&item.Qty,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, item)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
 
 func CreateStockOut(req schema.CreateStockOutRequest) error {
 	tx, err := config.DB.Begin(context.Background())

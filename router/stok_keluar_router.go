@@ -6,6 +6,47 @@ import (
 	"inventaris-app/crud"
 	"inventaris-app/schema"
 )
+// =======================
+// GET LIST
+// =======================
+
+// @Summary Get Stock Out List
+// @Tags Stock Out
+// @Produce json
+// @Success 200 {array} model.StockOut
+// @Router /stock-out [get]
+func GetStockOutListHandler(c *gin.Context) {
+
+	data, err := crud.GetStockOutList()
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, data)
+}
+
+// =======================
+// GET DETAIL
+// =======================
+
+// @Summary Get Stock Out Detail
+// @Tags Stock Out
+// @Produce json
+// @Param id path string true "Stock Out ID"
+// @Success 200 {array} model.StockOut
+// @Router /stock-out/{id} [get]
+func GetStockOutDetailHandler(c *gin.Context) {
+	id := c.Param("id")
+
+	data, err := crud.GetStockOutByID(id)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, data)
+}
 
 // =======================
 // CREATE (DRAFT / ALLOCATE)
@@ -94,4 +135,6 @@ func RegisterStockOutRoutes(r *gin.RouterGroup) {
 	r.POST("/stock-out", CreateStockOutHandler)
 	r.POST("/stock-out/:id/cancel", CancelStockOutHandler)
 	r.POST("/stock-out/:id/finish", FinishStockOutHandler)
+	r.GET("/stock-out", GetStockOutListHandler)
+	r.GET("/stock-out/:id", GetStockOutDetailHandler)
 }

@@ -27,6 +27,32 @@ definitions:
       sku:
         type: string
     type: object
+  model.StockIn:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      status:
+        type: string
+      supplier:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  model.StockOut:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      pelanggan:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   schema.CreateProductRequest:
     properties:
       name:
@@ -277,6 +303,19 @@ paths:
       tags:
       - Products
   /stock-in:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.StockIn'
+            type: array
+      summary: Get Stock In List
+      tags:
+      - Stock In
     post:
       consumes:
       - application/json
@@ -297,6 +336,24 @@ paths:
               type: string
             type: object
       summary: Create Stock In (Multi Product)
+      tags:
+      - Stock In
+  /stock-in/{id}:
+    get:
+      parameters:
+      - description: Stock In ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.StockIn'
+      summary: Get Stock In Detail
       tags:
       - Stock In
   /stock-in/{id}/cancel:
@@ -340,6 +397,19 @@ paths:
       tags:
       - Stock In
   /stock-out:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.StockOut'
+            type: array
+      summary: Get Stock Out List
+      tags:
+      - Stock Out
     post:
       consumes:
       - application/json
@@ -374,6 +444,26 @@ paths:
               type: string
             type: object
       summary: Allocate Stock Out (Reserve)
+      tags:
+      - Stock Out
+  /stock-out/{id}:
+    get:
+      parameters:
+      - description: Stock Out ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.StockOut'
+            type: array
+      summary: Get Stock Out Detail
       tags:
       - Stock Out
   /stock-out/{id}/cancel:
