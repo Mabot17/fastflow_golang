@@ -1,0 +1,175 @@
+basePath: /api
+definitions:
+  model.Product:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      sku:
+        type: string
+    type: object
+  schema.CreateProductRequest:
+    properties:
+      name:
+        type: string
+      sku:
+        type: string
+    required:
+    - name
+    - sku
+    type: object
+  schema.UpdateProductRequest:
+    properties:
+      name:
+        type: string
+      sku:
+        type: string
+    type: object
+host: localhost:8002
+info:
+  contact: {}
+  description: API untuk sistem inventory
+  title: Inventaris API
+  version: "1.0"
+paths:
+  /products:
+    get:
+      description: Get all products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Product'
+            type: array
+      summary: Get all products
+      tags:
+      - Products
+    post:
+      consumes:
+      - application/json
+      description: Create new product
+      parameters:
+      - description: Create Product
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Product'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create product
+      tags:
+      - Products
+  /products/{id}:
+    delete:
+      description: Delete product by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete product
+      tags:
+      - Products
+    get:
+      description: Get single product by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Product'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get product by ID
+      tags:
+      - Products
+    patch:
+      consumes:
+      - application/json
+      description: Partial update product
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Patch Product
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Product'
+      summary: Patch product (partial)
+      tags:
+      - Products
+    put:
+      consumes:
+      - application/json
+      description: Full update product
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Product
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Product'
+      summary: Update product (full)
+      tags:
+      - Products
+swagger: "2.0"
