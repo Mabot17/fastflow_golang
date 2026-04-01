@@ -19,6 +19,20 @@ definitions:
     - name
     - sku
     type: object
+  schema.CreateStockInRequest:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/schema.StockInItem'
+        type: array
+    type: object
+  schema.StockInItem:
+    properties:
+      product_id:
+        type: integer
+      qty:
+        type: number
+    type: object
   schema.UpdateProductRequest:
     properties:
       name:
@@ -172,4 +186,67 @@ paths:
       summary: Update product (full)
       tags:
       - Products
+  /stock-in:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Stock In
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.CreateStockInRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create Stock In
+      tags:
+      - Stock In
+  /stock-in/{id}/cancel:
+    post:
+      parameters:
+      - description: Stock In ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Cancel Stock In
+      tags:
+      - Stock In
+  /stock-in/{id}/finish:
+    post:
+      parameters:
+      - description: Stock In ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Finish Stock In
+      tags:
+      - Stock In
 swagger: "2.0"

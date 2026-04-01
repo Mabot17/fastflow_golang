@@ -224,6 +224,104 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/stock-in": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock In"
+                ],
+                "summary": "Create Stock In",
+                "parameters": [
+                    {
+                        "description": "Stock In",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.CreateStockInRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/stock-in/{id}/cancel": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock In"
+                ],
+                "summary": "Cancel Stock In",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Stock In ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/stock-in/{id}/finish": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock In"
+                ],
+                "summary": "Finish Stock In",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Stock In ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -256,6 +354,28 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.CreateStockInRequest": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.StockInItem"
+                    }
+                }
+            }
+        },
+        "schema.StockInItem": {
+            "type": "object",
+            "properties": {
+                "product_id": {
+                    "type": "integer"
+                },
+                "qty": {
+                    "type": "number"
+                }
+            }
+        },
         "schema.UpdateProductRequest": {
             "type": "object",
             "properties": {
@@ -280,8 +400,6 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "API untuk sistem inventory",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	LeftDelim:        "{{",
-	RightDelim:       "}}",
 }
 
 func init() {

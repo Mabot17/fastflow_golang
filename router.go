@@ -20,6 +20,7 @@ func SetupRouter() *gin.Engine {
 
 	// register modules
 	router.RegisterProductRoutes(api)
+	router.RegisterStockInRoutes(api)
 
 	return r
 }
