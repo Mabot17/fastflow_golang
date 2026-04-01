@@ -25,6 +25,8 @@ definitions:
         items:
           $ref: '#/definitions/schema.StockInItem'
         type: array
+      pelanggan:
+        type: string
     type: object
   schema.StockInItem:
     properties:
@@ -206,7 +208,7 @@ paths:
             additionalProperties:
               type: string
             type: object
-      summary: Create Stock In
+      summary: Create Stock In (Multi Product)
       tags:
       - Stock In
   /stock-in/{id}/cancel:

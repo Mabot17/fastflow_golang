@@ -20,18 +20,19 @@ func CreateStockIn(req schema.CreateStockInRequest) error {
 
 	var stockInID int
 
-	// insert header
+	// insert header (dengan pelanggan)
 	err = tx.QueryRow(context.Background(),
-		`INSERT INTO inventaris.stok_masuk (sm_status)
-		 VALUES ('CREATED')
-		 RETURNING sm_id`).
+		`INSERT INTO inventaris.stok_masuk (sm_status, sm_pelanggan)
+		 VALUES ('CREATED', $1)
+		 RETURNING sm_id`,
+		req.Pelanggan).
 		Scan(&stockInID)
 
 	if err != nil {
 		return err
 	}
 
-	// insert detail
+	// insert multiple produk
 	for _, item := range req.Items {
 		_, err := tx.Exec(context.Background(),
 			`INSERT INTO inventaris.stok_masuk_produk

@@ -3,6 +3,7 @@ package model
 type StockIn struct {
 	ID        int
 	Status    string
+	Pelanggan string
 	CreatedAt string
 	UpdatedAt string
 }

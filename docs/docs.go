@@ -236,7 +236,7 @@ const docTemplate = `{
                 "tags": [
                     "Stock In"
                 ],
-                "summary": "Create Stock In",
+                "summary": "Create Stock In (Multi Product)",
                 "parameters": [
                     {
                         "description": "Stock In",
@@ -362,6 +362,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/schema.StockInItem"
                     }
+                },
+                "pelanggan": {
+                    "type": "string"
                 }
             }
         },

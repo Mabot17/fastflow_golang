@@ -1,7 +1,8 @@
 package schema
 
 type CreateStockInRequest struct {
-	Items []StockInItem `json:"items"`
+	Pelanggan string        `json:"pelanggan"`
+	Items     []StockInItem `json:"items"`
 }
 
 type StockInItem struct {

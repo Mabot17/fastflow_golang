@@ -11,7 +11,7 @@ import (
 // CREATE
 // =======================
 
-// @Summary Create Stock In
+// @Summary Create Stock In (Multi Product)
 // @Tags Stock In
 // @Accept json
 // @Produce json
